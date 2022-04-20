@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SVG Image Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SVG Image Viewer">
+    <meta name="keywords" content="SVG Image Viewer">
+    <meta name="author" content="SVG Image Viewer">
+    <!-- Load jquery, bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+
+<body>
+
+    <div class="container-fluid " data-spy="scroll">
+
+        <div class="logpanel">
+            <div class="jumbotron headers">
+                <div class="container">
+                    <h1 class="display-4">File Log Panel</h1>
+                </div>
+            </div>
+
+            <div class="input-group mb-3">
+                <form id="fileupload" method="post" action="uploads" enctype="multipart/form-data">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02"
+                            aria-describedby="inputGroupFileAddon02" name="uploadFileName">
+                        <label class="custom-file-label" for="inputGroupFile02">Upload a SVG image</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button type="submit" value="upload" class="btn btn-primary ">Upload</button>
+                    </div>
+                </form>
+            </div>
+            <div class="table-responsive-xl file-log-view">
+                <div class="headers">
+                    <h2>Log Panel Table</h2>
+                </div>
+                <table class="table" id="filelist">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Image (click to download)</th>
+                            <th scope="col">File Name (click to download)</th>
+                            <th scope="col">File Size (KB)</th>
+                            <th scope="col">Number of rectangles</th>
+                            <th scope="col">Number of circles</th>
+                            <th scope="col">Number of paths</th>
+                            <th scope="col">Number of groups</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- data will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-12 divider">
+            <hr>
+        </div>
+        <div class="svg-panel">
+            <div class="jumbotron headers">
+                <div class="container">
+                    <h1 class="display-4">SVG View Panel</h1>
+                </div>
+            </div>
+
+
+            <form id="fileView" method="GET">
+                <div class="form-row align-items-center">
+                    <div class="col-auto my-2">
+                        <label class="mr-sm-2 sr-only" for="viewSelect">Select file</label>
+                        <select class="custom-select mr-sm-2" id="viewSelect">
+                        </select>
+                    </div>
+                    <div class="col-auto my-1">
+                        <button type="submit" class="btn btn-primary">Load</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="svg-view-panel table-responsive-xl">
+                <div class="headers">
+                    <h2>View Panel Table </h2>
+                </div>
+                <div class="text-center img-placeholder">
+                    <img class="img-fluid" id="viewImg" src="">
+                </div>
+
+                <table class="table table-bordered" id="viewTable">
+                    <thead>
+
+                        <tr>
+                            <th scope="col-6">Title</th>
+                            <td id=viewTitle class="editable"></td>
+                            <th scope="col-6">Description</th>
+                            <td id=viewDesc class="editable"></td>
+                        </tr>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Component</th>
+                            <th scope="col">Summary</th>
+                            <th scope="col">Other Attributes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <!-- Show Attributes -->
+                <div class="headers">
+                    <h2>Show (Other) Attributes </h2>
+                </div>
+
+                <div class="Attr-view-panel">
+                    <form id="showAttrView" method="GET" action="showAttr">
+                        <div class="form-row align-items-center">
+                            <div class="col-auto my-2">
+                                <label class="mr-sm-2 sr-only" for="viewSelect">Select file</label>
+                                <select class="custom-select mr-sm-2" id="viewSelectShapeForAttr">
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered" id="showAttr">
+                        <thead>
+
+                            <tr>
+                                <th scope="col">Attribute</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Value</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12 divider">
+        <hr>
+    </div>
+    <div class="container-fluid ">
+        <form id="createsvg" method="post" action="createsvg">
+            <label class="custom-input-label" for="inputSVGName">Enter SVG image name(FileName): </label>
+            <input type="text" class="custom-text-input" id="inputSVGName" aria-describedby="inputSVGName"
+                name="svgname">
+            <button type="submit" value="createsvg" class="btn btn-primary ">Create SVG</button>
+    </div>
+    </form>
+    </div>
+
+    <div class="col-12 divider">
+        <hr>
+    </div>
+
+
+    <!-- <div class="addShapeClass"> -->
+    <div>
+        <div class="jumbotron headers">
+            <div class="container">
+                <h1 class="display-4">Add Shape</h1>
+            </div>
+        </div>
+
+
+        <form class="addCircle" id="addCircleID" method="POST" action="addCircleRoute">
+            <!-- <form id="fileViewAdd" method="GET"> -->
+            <div class="form-row align-items-center">
+                <div class="col-auto my-2">
+                    <label class="mr-sm-2 sr-only" for="viewSelectAdd">Select file</label>
+                    <select class="custom-select mr-sm-2" id="viewSelectAddCircle" name="viewSelectAddCircle">
+                    </select>
+                </div>
+                <div class="col-auto my-1">
+                    <button type="submit" class="btn btn-primary">Load</button>
+                </div>
+            </div>
+            <!-- </form> -->
+            <!-- <form class="addCircle" id="addCircleID" method="POST" action="addCircleRoute"> -->
+            <div class="form-row">
+                <div class="col-2 mb-3">
+                    <label>CX Value</label>
+                    <input type="number" class="form-control" name="circCX" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>CY Value</label>
+                    <input type="number" class="form-control" name="circCY" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Radius</label>
+                    <input type="number" class="form-control" name="circR" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Color(Fill)</label>
+                    <input type="color" class="form-control" name="circFill" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Stroke</label>
+                    <input type="color" class="form-control" name="circSTR" required>
+                </div>
+                <div class="col-2 mb-3 ">
+                    <div class="btnShape">
+                        <button type="submit" class="btn btn-primary">Add Circle</button>
+                    </div>
+                </div>
+            </div>
+            <small class="text-muted">
+                All dimensions are in centimeters.
+            </small>
+
+        </form>
+
+        <form class="addRect" id="addRectID" method="POST" action="addRectRoute">
+            <div class="form-row align-items-center">
+                <div class="col-auto my-2">
+                    <label class="mr-sm-2 sr-only" for="viewSelectAdd">Select file</label>
+                    <select class="custom-select mr-sm-2" id="viewSelectAddRect" name="viewSelectAddRect">
+                    </select>
+                </div>
+                <div class="col-auto my-1">
+                    <button type="submit" class="btn btn-primary">Load</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-1 mb-3">
+                    <label>X Value</label>
+                    <input type="number" class="form-control" name="rectX" required>
+                </div>
+                <div class="col-1 mb-3">
+                    <label>Y Value</label>
+                    <input type="number" class="form-control" name="rectY" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Width</label>
+                    <input type="number" class="form-control" name="rectW" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Height</label>
+                    <input type="number" class="form-control" name="rectH" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Color(Fill)</label>
+                    <input type="color" class="form-control" name="rectFill" required>
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Stroke</label>
+                    <input type="color" class="form-control" name="rectSTR" required>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <div class="btnShape">
+                        <button type="submit" class="btn btn-primary">Add Rectangle</button>
+                    </div>
+                </div>
+            </div>
+            <small class="text-muted">
+                All dimensions are in centimeters.
+            </small>
+
+        </form>
+
+    </div>
+    <div class="col-12 divider">
+        <hr>
+    </div>
+
+    <!-- Scale Shapes -->
+    <div class="jumbotron headers">
+        <div class="container">
+            <h1 class="display-4">Scale Shapes </h1>
+        </div>
+    </div>
+    <div class="scale-panel">
+
+        <form id="fileViewScale" method="GET">
+            <div class=" align-items-center">
+                <div class=" col-3 col-auto mb-2">
+                    <label class="mr-sm-2 sr-only" for="viewSelectScale">Select file</label>
+                    <select class="custom-select mr-sm-2" id="viewSelectScale">
+                    </select>
+                </div>
+            </div>
+        </form>
+        <form id="shapeScale" method="GET">
+            <div class="align-items-center">
+                <div class="col-3 mb-2">
+                    <label class="mr-sm-2 sr-only" for="selectShapeScale">Select shape</label>
+                    <select class="custom-select mr-sm-2" id="selectShapeScale">
+                    </select>
+                </div>
+                <div class="col-3 mb-2">
+                    <label>Factor</label>
+                    <input type="number" class="form-control" id="scaleFactor" value="1.0">
+
+                </div>
+            </div>
+
+            <div class="scalebtn">
+                <button type="submit" class="btn btn-primary btn-lg">Update Scale</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 divider">
+        <hr>
+    </div>
+
+    <!-- Edit Attributes -->
+    <div class="editArr">
+        <div class="jumbotron headers">
+            <div class="container">
+                <h1 class="display-4">Edit Attributes </h1>
+            </div>
+        </div>
+
+
+        <form id="fileView" method="GET">
+            <div class="form-row align-items-center">
+                <div class="col-auto my-2">
+                    <label class="mr-sm-2 sr-only" for="viewSelect">Select file</label>
+                    <select class="custom-select mr-sm-2" id="viewSelect">
+                    </select>
+                </div>
+                <div class="col-auto my-1">
+                    <button type="submit" class="btn btn-primary">Load</button>
+                </div>
+            </div>
+        </form>
+        <div>
+            <p class="content">Enter circle data:</p>
+        </div>
+        <form class="editArrForm" id="editArrID" method="PUT" action="editAttr">
+            <!-- Circle details -->
+            <div class="form-row">
+                <div class="col-2 mb-3">
+                    <label>CX Value</label>
+                    <input type="number" class="form-control" id="editcircCX" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>CY Value</label>
+                    <input type="number" class="form-control" id="editcircCY" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Radius</label>
+                    <input type="number" class="form-control" id="editcircR" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Color(Fill)</label>
+                    <input type="color" class="form-control" id="editcircFill" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Stroke</label>
+                    <input type="color" class="form-control" id="editcircSTR" value="">
+                </div>
+
+            </div>
+
+            <!-- Rectangle details -->
+            <div>
+                <p class="content">Enter rectangle data:</p>
+            </div>
+            <div class="form-row">
+                <div class="col-2 mb-3">
+                    <label>X Value</label>
+                    <input type="number" class="form-control" id="editrectX" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Y Value</label>
+                    <input type="number" class="form-control" id="editrectY" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Width</label>
+                    <input type="number" class="form-control" id="editrectWidth" value="">
+                </div>
+                <div class="col-2 mb-3">
+                    <label>Height</label>
+                    <input type="number" class="form-control" id="editrectHeight" value="">
+                </div>
+
+
+            </div>
+            <div>
+
+                <div>
+                    <label>Enter valid Path data: </label>
+                    <input type="text" id="editPath" value="">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary btn-lg">Update SVG</button>
+            </div>
+            <small class="text-muted">
+                All dimensions are in centimeters.
+            </small>
+
+        </form>
+    </div>
+
+
+    <div class="col-12 divider">
+        <hr>
+    </div>
+
+
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+
+</html>
